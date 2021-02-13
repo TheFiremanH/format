@@ -1,5 +1,5 @@
 /*
-** Code written by ThinkableUnder.
+** Code written by TheFiremanH.
 ** All of that is openSource, your welcome.
 **        """   
 ** -\-    _|__  
@@ -18,7 +18,7 @@ int main(void)
 {
 	int modifs = 0;
 	int modifsTmp = 1;
-	int nomDeFichier[255];
+	char nomDeFichier[255];
 	FILE* fichier = NULL;
 	FILE* temp = NULL;
 
@@ -26,91 +26,83 @@ int main(void)
 	scanf("%s", nomDeFichier);
 	printf("\n***\nFichier confirmé : %s\n***", nomDeFichier);
 	
-	fichier = fopen(nomDeFichier, "r+");
-	if (fichier != NULL)
+	int caracterePrecedent = 0;
+	int caractereActuel = 0;
+	while (modifsTmp != 0)
 	{
-		int caracterePrecedent = 0;
-		int caractereActuel = 0;
-		while (modifsTmp != 0)
+		modifsTmp = 0;
+		bool recordIt = false;
+		temp = tmpfile();
+		fichier = fopen(nomDeFichier, "r+");
+		if (temp == NULL || fichier == NULL) 
+		{ 
+			printf("\nUnable to create temp file"); 
+			return 0; 
+		}
+		rewind(temp);
+		do
 		{
-			modifsTmp = 0;
-			bool recordIt = false;
-			temp = tmpfile();
-			if (temp == NULL) 
-			{ 
-				printf("\nUnable to create temp file"); 
-				return 0; 
-			}
-			rewind(temp);
-			do
+			caractereActuel = fgetc(fichier);
+			printf("\nChecking %d (%c), previously checking %d (%c)", caractereActuel, caractereActuel, caracterePrecedent, caracterePrecedent);
+			if (caractereActuel != EOF)
 			{
-				caractereActuel = fgetc(fichier);
-				printf("\nChecking %d (%c), previously checking %d (%c)", caractereActuel, caractereActuel, caracterePrecedent, caracterePrecedent);
-				if (caractereActuel != EOF)
+				if (caractereActuel == '\n') 
 				{
-					if (caractereActuel == '\n') 
+					if (caracterePrecedent == ' ') // si le caractere avant un retour est un espace
 					{
-						if (caracterePrecedent == ' ') // si le caractere avant un retour est un espace
-						{
-							recordIt = false; // ne pas l'enregistrer
-						}
-						if (caracterePrecedent == '\t')
-						{
-							recordIt = false; // ne pas l'enregistrer 
-						}
+						recordIt = false; // ne pas l'enregistrer
 					}
-					if (recordIt)
+					if (caracterePrecedent == '\t')
 					{
-						fputc(caracterePrecedent, temp);
-						printf("\n vvv Caractere %d (%c) was saved", caracterePrecedent, caracterePrecedent);
+						recordIt = false; // ne pas l'enregistrer 
 					}
-					else
-					{
-						printf("\n xxx Caractere %d (%c) was not saved", caracterePrecedent, caracterePrecedent);
-						modifs++;
-						modifsTmp++;
-					}
-					recordIt = true;
-					caracterePrecedent = caractereActuel;
+				}
+				if (recordIt)
+				{
+					fputc(caracterePrecedent, temp);
+					printf("\n vvv Caractere %d (%c) was saved", caracterePrecedent, caracterePrecedent);
 				}
 				else
 				{
-					printf("\nEnd of document detected, saving previous charactere");
-					fputc(caracterePrecedent, temp);
-					break;
+					printf("\n xxx Caractere %d (%c) was not saved", caracterePrecedent, caracterePrecedent);
+					modifs++;
+					modifsTmp++;
 				}
-			} while (caractereActuel != EOF);
-
-			printf("\nSaving temp file to file");
-			rewind(fichier);
-			fclose(fichier);
-			printf("\n  > Original file is being recycled.");
-			fichier = fopen(nomDeFichier, "w+");
-			if (fichier == NULL) 
-			{ 
-				printf("/nUnable to write on the old file"); 
-				return 0; 
+				recordIt = true;
+				caracterePrecedent = caractereActuel;
 			}
-			rewind(temp);
-			rewind(fichier);
-			printf("\n  > Writing the modifications : \n");
-			while(!feof(temp))
+			else
 			{
-				putchar(fgetc(temp)); 
-				fputc(fgetc(temp), fichier);
+				printf("\nEnd of document detected, saving previous charactere");
+				fputc(caracterePrecedent, temp);
+				break;
 			}
-			rewind(temp);
-			fclose(temp);
-			printf("\n\nTempfile saved. modifsTmp = %d", modifsTmp);
-		}
-		printf("\n%d characteres were deleted.\n", modifs);
+		} while (caractereActuel != EOF);
 
+		printf("\nSaving temp file to file");
+		rewind(fichier);
+		fclose(fichier);
+		printf("\n  > Original file is being recycled.");
+		fichier = fopen(nomDeFichier, "w");
+		if (fichier == NULL) 
+		{ 
+			printf("/nUnable to write on the old file"); 
+			return 0; 
+		}
+		rewind(temp);
+		rewind(fichier);
+		printf("\n  > Writing the modifications");
+		while(!feof(temp))
+		{
+			fputc(fgetc(temp), fichier);
+		}
+		rewind(temp);
+		fclose(temp);
+		rewind(fichier);
+		fclose(fichier);
+		printf("\n\nTempfile saved. modifsTmp = %d", modifsTmp);
 	}
-	else 
-	{
-		printf("\n***\nERROR : file not found.\n***\n");
-	}
-	fclose(fichier);
+	printf("\n%d characteres were deleted.\n", modifs);
 
 	return 0;
 }
