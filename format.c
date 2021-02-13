@@ -19,6 +19,7 @@ int main(void)
 	int modifs = 0;
 	int modifsTmp = 1;
 	int passages = 0;
+	int delRetour = 2;
 	char nomDeFichier[255];
 	FILE* fichier = NULL;
 	FILE* temp = NULL;
@@ -26,6 +27,13 @@ int main(void)
 	printf("\nEntrer le nom de fichier : ");
 	scanf("%s", nomDeFichier);
 	printf("\n***\nFichier confirmé : %s\n***", nomDeFichier);
+
+	while (delRetour != 1 && delRetour != 0)
+	{
+		printf("\nVoulez vous supprimer les \\n inutiles ? (0 - 1) : ");
+		scanf("%d", &delRetour);
+	}
+	printf("\n***\nChoix confirmé : %d\n***\n", delRetour);
 
 	int caracterePrecedent = 0;
 	int caractereActuel = 0;
@@ -37,9 +45,14 @@ int main(void)
 		bool recordIt = false;
 		temp = tmpfile();
 		fichier = fopen(nomDeFichier, "r+");
-		if (temp == NULL || fichier == NULL)
+		if (fichier == NULL)
 		{
-			printf("\nUnable to create files");
+			printf("\nFile not found.");
+			return 0;
+		}
+		if (temp == NULL)
+		{
+			printf("\nUnable to create temporary files.");
 			return 0;
 		}
 		rewind(temp);
@@ -55,6 +68,12 @@ int main(void)
 					modifsTmp++;
 				}
 				if (caracterePrecedent == '\t')
+				{
+					recordIt = false; // ne pas l'enregistrer
+					modifs++;
+					modifsTmp++;
+				}
+				if (caracterePrecedent == '\n' && delRetour == 1)
 				{
 					recordIt = false; // ne pas l'enregistrer
 					modifs++;
@@ -108,7 +127,7 @@ int main(void)
 		rewind(fichier);
 		fclose(fichier);
 	}
-	printf("\n\n%d characteres were deleted.\nThe file was used %d times\n\n", modifs, passages);
+	printf("\n\n%d charactere(s) was/were deleted.\nThe file was used %d times\n\n", modifs, passages);
 
 	return 0;
 }
