@@ -1,11 +1,11 @@
 /*
 ** Code written by TheFiremanH.
 ** All of that is openSource, your welcome.
-**        """   
-** -\-    _|__  
-**  |\___/  ' \ 
-**  \     /(((/ 
-**   \___/)))/  
+**        """
+** -\-    _|__
+**  |\___/  ' \
+**  \     /(((/
+**   \___/)))/
 ** Use this code to remove all non escential spaces and tabulabulations
 */
 
@@ -26,7 +26,7 @@ int main(void)
 	printf("\nEntrer le nom de fichier : ");
 	scanf("%s", nomDeFichier);
 	printf("\n***\nFichier confirmé : %s\n***", nomDeFichier);
-	
+
 	int caracterePrecedent = 0;
 	int caractereActuel = 0;
 	int caractereTransfert = 0;
@@ -37,16 +37,16 @@ int main(void)
 		bool recordIt = false;
 		temp = tmpfile();
 		fichier = fopen(nomDeFichier, "r+");
-		if (temp == NULL || fichier == NULL) 
-		{ 
-			printf("\nUnable to create files"); 
-			return 0; 
+		if (temp == NULL || fichier == NULL)
+		{
+			printf("\nUnable to create files");
+			return 0;
 		}
 		rewind(temp);
 		do
 		{
 			caractereActuel = fgetc(fichier);
-			if (caractereActuel == '\n') 
+			if (caractereActuel == '\n')
 			{
 				if (caracterePrecedent == ' ') // si le caractere avant un retour est un espace
 				{
@@ -56,7 +56,7 @@ int main(void)
 				}
 				if (caracterePrecedent == '\t')
 				{
-					recordIt = false; // ne pas l'enregistrer 
+					recordIt = false; // ne pas l'enregistrer
 					modifs++;
 					modifsTmp++;
 				}
@@ -82,10 +82,10 @@ int main(void)
 		rewind(fichier);
 		fclose(fichier);
 		fichier = fopen(nomDeFichier, "w");
-		if (fichier == NULL) 
-		{ 
-			printf("/nUnable to write on the old file"); 
-			return 0; 
+		if (fichier == NULL)
+		{
+			printf("/nUnable to write on the old file");
+			return 0;
 		}
 		rewind(temp);
 		rewind(fichier);
@@ -97,8 +97,8 @@ int main(void)
 			{
 				//printf("\n    >> %c (%d)", caractereTransfert, caractereTransfert);
 				fputc(caractereTransfert, fichier);
-			} 
-			else 
+			}
+			else
 			{
 				//printf("\n   xx> %c (%d)", caractereTransfert, caractereTransfert);
 			}
