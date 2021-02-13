@@ -18,6 +18,7 @@ int main(void)
 {
 	int modifs = 0;
 	int modifsTmp = 1;
+	int passages = 0;
 	char nomDeFichier[255];
 	FILE* fichier = NULL;
 	FILE* temp = NULL;
@@ -30,6 +31,7 @@ int main(void)
 	int caractereActuel = 0;
 	while (modifsTmp != 0)
 	{
+		passages++;
 		modifsTmp = 0;
 		bool recordIt = false;
 		temp = tmpfile();
@@ -57,6 +59,11 @@ int main(void)
 						recordIt = false; // ne pas l'enregistrer 
 					}
 				}
+				if (caracterePrecedent == 255)
+				{
+					recordIt = false;
+				}
+
 				if (recordIt)
 				{
 					fputc(caracterePrecedent, temp);
@@ -65,8 +72,11 @@ int main(void)
 				else
 				{
 					printf("\n xxx Caractere %d (%c) was not saved", caracterePrecedent, caracterePrecedent);
-					modifs++;
-					modifsTmp++;
+					if (caracterePrecedent == ' ' || caracterePrecedent == '\t')
+					{
+						modifs++;
+						modifsTmp++;
+					}
 				}
 				recordIt = true;
 				caracterePrecedent = caractereActuel;
