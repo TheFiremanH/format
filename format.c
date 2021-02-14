@@ -6,7 +6,7 @@
 **  |\___/  ' \
 **  \     /(((/
 **   \___/)))/
-** Use this code to remove all non escential spaces and tabulabulations
+** Use this code to remove all non escential spaces and tabulabulations, or /n
 */
 
 #include <stdio.h>
@@ -14,26 +14,31 @@
 #include <string.h>
 #include <stdbool.h>
 
-int main(void)
+int main(int argc, char *argv[])
 {
+	if (argc < 2)
+	{
+		printf("Arguments required !\n  format file_name -n");
+		return 0;
+	}
 	int modifs = 0;
 	int modifsTmp = 1;
 	int passages = 0;
-	int delRetour = 2;
+	int delRetour = 0;
 	char nomDeFichier[255];
 	FILE* fichier = NULL;
 	FILE* temp = NULL;
 
-	printf("\nEntrer le nom de fichier : ");
-	scanf("%s", nomDeFichier);
-	printf("\n***\nFichier confirmé : %s\n***", nomDeFichier);
+	strcpy(nomDeFichier, argv[1]);
 
-	while (delRetour != 1 && delRetour != 0)
+	if (argc > 2)
 	{
-		printf("\nVoulez vous supprimer les \\n inutiles ? (0 - 1) : ");
-		scanf("%d", &delRetour);
+		if (strcmp(argv[2], "-n") == 0)
+		{
+			delRetour = 1;
+			printf("\nuseless \\n will be deleted.");
+		}
 	}
-	printf("\n***\nChoix confirmé : %d\n***\n", delRetour);
 
 	int caracterePrecedent = 0;
 	int caractereActuel = 0;
@@ -76,6 +81,12 @@ int main(void)
 				if (caracterePrecedent == '\n' && delRetour == 1)
 				{
 					recordIt = false; // ne pas l'enregistrer
+					modifs++;
+					modifsTmp++;
+				}
+				if (caracterePrecedent == 13)
+				{
+					recordIt = false;
 					modifs++;
 					modifsTmp++;
 				}
@@ -127,7 +138,7 @@ int main(void)
 		rewind(fichier);
 		fclose(fichier);
 	}
-	printf("\n\n%d charactere(s) was/were deleted.\nThe file was used %d times\n\n", modifs, passages);
+	printf("\n%d charactere(s) was/were deleted.\nThe file was used %d times\n\n", modifs, passages);
 
 	return 0;
 }
