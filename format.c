@@ -8,17 +8,15 @@
 **   \___/)))/
 ** Use this code to remove all non escential spaces and tabulabulations, or /n
 */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-
 int main(int argc, char *argv[])
 {
 	if (argc < 2)
 	{
-		printf("Arguments required !\n  format file_name -n");
+		printf("\nArguments required !\n  format file_name -n\n");
 		return 0;
 	}
 	int modifs = 0;
@@ -28,9 +26,7 @@ int main(int argc, char *argv[])
 	char nomDeFichier[255];
 	FILE* fichier = NULL;
 	FILE* temp = NULL;
-
 	strcpy(nomDeFichier, argv[1]);
-
 	if (argc > 2)
 	{
 		if (strcmp(argv[2], "-n") == 0)
@@ -39,7 +35,6 @@ int main(int argc, char *argv[])
 			printf("\nuseless \\n will be deleted.");
 		}
 	}
-
 	int caracterePrecedent = 0;
 	int caractereActuel = 0;
 	int caractereTransfert = 0;
@@ -95,7 +90,6 @@ int main(int argc, char *argv[])
 			{
 				recordIt = false;
 			}
-
 			if (recordIt)
 			{
 				fputc(caracterePrecedent, temp);
@@ -108,7 +102,6 @@ int main(int argc, char *argv[])
 			recordIt = true;
 			caracterePrecedent = caractereActuel;
 		} while (caractereActuel != EOF);
-
 		rewind(fichier);
 		fclose(fichier);
 		fichier = fopen(nomDeFichier, "w");
@@ -139,6 +132,5 @@ int main(int argc, char *argv[])
 		fclose(fichier);
 	}
 	printf("\n%d charactere(s) was/were deleted.\nThe file was used %d times\n\n", modifs, passages);
-
 	return 0;
 }
