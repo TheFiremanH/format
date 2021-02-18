@@ -95,10 +95,10 @@ int main(int argc, char *argv[])
 				fputc(caracterePrecedent, temp);
 				//printf("\n vvv Caractere %d (%c) was saved", caracterePrecedent, caracterePrecedent);
 			}
-			else
+			/*else
 			{
-				//printf("\n xxx Caractere %d (%c) was not saved", caracterePrecedent, caracterePrecedent);
-			}
+				printf("\n xxx Caractere %d (%c) was not saved", caracterePrecedent, caracterePrecedent);
+			}*/
 			recordIt = true;
 			caracterePrecedent = caractereActuel;
 		} while (caractereActuel != EOF);
@@ -121,10 +121,10 @@ int main(int argc, char *argv[])
 				//printf("\n    >> %c (%d)", caractereTransfert, caractereTransfert);
 				fputc(caractereTransfert, fichier);
 			}
-			else
+			/*else
 			{
-				//printf("\n   xx> %c (%d)", caractereTransfert, caractereTransfert);
-			}
+				printf("\n   xx> %c (%d)", caractereTransfert, caractereTransfert);
+			}*/
 		}
 		rewind(temp);
 		fclose(temp);
