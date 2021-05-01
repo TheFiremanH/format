@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
 		}
 		if (temp == NULL)
 		{
-			printf("\nUnable to create temporary files.");
+			printf("\nUnable to create temporary file.");
 			return 0;
 		}
 		rewind(temp);
