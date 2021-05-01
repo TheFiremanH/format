@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
 {
 	if (argc < 2)
 	{
-		printf("\nArguments required !\n  format file_name -n\n");
+		printf("\nArguments required !\n  format file_name (-n)\n");
 		return 0;
 	}
 	int modifs = 0;
